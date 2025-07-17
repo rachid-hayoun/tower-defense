@@ -1,4 +1,4 @@
-#include "Wave.hpp"
+#include "WaveManager.hpp"
 #include "GameMap.hpp"
 #include <iostream>
 
