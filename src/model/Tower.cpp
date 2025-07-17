@@ -11,7 +11,6 @@ Tower::Tower(float x, float y, sf::Texture* texture, TowerType type)
     targetRotation = 0.0f;
     timeSinceLastShot = 0.0f;
     
-    // Initialiser les stats selon le type
     stats = TowerConfig::getStatsForType(towerType);
     initializeFromType();
     
@@ -32,7 +31,6 @@ Tower::Tower(float x, float y, sf::Texture* texture, TowerType type)
 }
 
 void Tower::initializeFromType() {
-    // Appliquer les stats du niveau 1
     damage = stats.levelStats[0].damage;
     fireRate = stats.levelStats[0].fireRate;
     range = stats.levelStats[0].range;
@@ -171,8 +169,6 @@ std::vector<int> Tower::collectRewards() {
     return rewards;
 }
 
-// AMÉLIORATION
-
 bool Tower::canUpgrade() const {
     return level != TowerLevel::LEVEL_3;
 }
@@ -232,7 +228,7 @@ std::string Tower::getLevelText() const {
 }
 
 void Tower::updateStatsForLevel() {
-    int levelIndex = (int)level - 1; // Convertir en index 0-2
+    int levelIndex = (int)level - 1;
     
     damage = stats.levelStats[levelIndex].damage;
     fireRate = stats.levelStats[levelIndex].fireRate;
@@ -247,7 +243,6 @@ void Tower::updateVisualForLevel() {
     sf::Color baseColor;
     sf::Color rangeColor;
     
-    // Couleurs de base selon le type de tour
     switch (towerType) {
         case TowerType::BASIC:
             baseColor = sf::Color::White;
@@ -262,8 +257,7 @@ void Tower::updateVisualForLevel() {
             rangeColor = sf::Color(255, 100, 100, 150);
             break;
     }
-    
-    // Modifications selon le niveau
+
     switch (level) {
         case TowerLevel::LEVEL_1:
             sprite.setScale(1.0f, 1.0f);
@@ -273,7 +267,6 @@ void Tower::updateVisualForLevel() {
             
         case TowerLevel::LEVEL_2:
             sprite.setScale(1.2f, 1.2f);
-            // Teinte dorée pour niveau 2
             sprite.setColor(sf::Color(
                 std::min(255, (int)(baseColor.r * 1.2f)),
                 std::min(255, (int)(baseColor.g * 1.2f)),
@@ -284,7 +277,6 @@ void Tower::updateVisualForLevel() {
             
         case TowerLevel::LEVEL_3:
             sprite.setScale(1.5f, 1.5f);
-            // Teinte rouge intense pour niveau 3
             sprite.setColor(sf::Color(255, 
                 std::max(100, (int)(baseColor.g * 0.6f)), 
                 std::max(100, (int)(baseColor.b * 0.6f))
