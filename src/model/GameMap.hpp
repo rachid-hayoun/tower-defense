@@ -50,7 +50,6 @@ public:
     void deselectTower();
     bool hasTowerAt(int tileX, int tileY) const;
     
-    // Système d'amélioration
     bool upgradeTower(int mouseX, int mouseY);
     Tower* getTowerAt(int mouseX, int mouseY);
 
@@ -73,8 +72,7 @@ private:
     sf::Texture grass11Texture;
     sf::Texture grass12Texture;
     sf::Texture grass13Texture;
-    
-    // Textures pour chaque type de tour
+
     std::map<TowerType, sf::Texture> towerTextures;
 
     sf::Sprite grassSprite;
