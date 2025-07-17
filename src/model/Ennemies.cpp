@@ -6,25 +6,20 @@
 #include <cmath>
 
 Enemy::Enemy(float startX, float startY, GameMap* map, EnemyType type) : gameMap(map), enemyType(type) {
-    // Position et mouvement
     position = sf::Vector2f(startX, startY);
     velocity = sf::Vector2f(0.0f, 0.0f);
     speed = 150.0f;
     
-    // Pathfinding
     currentPathIndex = 0;
     reachedEnd = false;
     
-    // Statistiques
     maxHealth = 100;
     currentHealth = 100;
     reward = 10;
     
-    // Sprite
     sprite.setPosition(position);
     sprite.setOrigin(16.0f, 16.0f);
     
-    // barre de vie
     float barWidth = 32.0f;
     float barHeight = 4.0f;
     
@@ -55,7 +50,6 @@ std::string Enemy::getTextureFileName() const {
 void Enemy::generatePath() {
     pathPoints.clear();
     
-    // Trouve le point de départ
     for (int y = 0; y < gameMap->getMapHeight(); y++) {
         for (int x = 0; x < gameMap->getMapWidth(); x++) {
             if (gameMap->isPath(x, y)) {
@@ -108,24 +102,21 @@ void Enemy::generatePath() {
         }
         
         if (!foundNext) {
-            break; // Fin
+            break;
         }
     }
 }
 
 void Enemy::updateSpriteRotation(sf::Vector2f direction) {
-    // Calculer l'angle en radians puis le convertir en degrés
     float angle = atan2(direction.y, direction.x) * 180.0f / M_PI;
     
     sprite.setRotation(angle);
 }
-
 void Enemy::moveAlongPath(float deltaTime) {
     if (reachedEnd || pathPoints.empty() || currentPathIndex >= pathPoints.size()) {
         reachedEnd = true;
         return;
     }
-    
     sf::Vector2f target = pathPoints[currentPathIndex];
     sf::Vector2f direction = target - position;
     float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
@@ -172,16 +163,15 @@ bool Enemy::loadTexture() {
     }
     sprite.setTexture(texture);
     
-    // Ajuster la taille selon le type d'ennemi
     switch (enemyType) {
         case EnemyType::BASIC:
             sprite.setScale(1.5f, 1.5f);
             break;
         case EnemyType::FAST:
-            sprite.setScale(1.3f, 1.3f); // Plus petit pour montrer qu'il est agile
+            sprite.setScale(1.3f, 1.3f); 
             break;
         case EnemyType::TANK:
-            sprite.setScale(2.0f, 2.0f); // Plus gros pour montrer qu'il est tank
+            sprite.setScale(2.0f, 2.0f);
             break;
     }
     
@@ -212,9 +202,7 @@ void Enemy::update(float deltaTime) {
 
 bool Enemy::hasReachedEnd() const {
     return reachedEnd;
-}
-
-// Méthodes manquantes à ajouter :
+} 
 
 sf::Vector2f Enemy::getPosition() const {
     return position;
