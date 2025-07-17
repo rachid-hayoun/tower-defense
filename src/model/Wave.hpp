@@ -2,11 +2,9 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <memory>
-#include "Enemy.hpp"
+#include "Ennemies.hpp"
 
 class GameMap;
-
-// Remove the duplicate EnemyType enum - it's already defined in Enemy.hpp
 
 struct WaveEnemy {
     EnemyType type;
@@ -35,7 +33,7 @@ public:
     bool isWaveInProgress() const;
     
     void removeDeadEnemies();
-    void cleanupProcessedEnemies(); // Add this declaration
+    void cleanupProcessedEnemies(); 
     
 private:
     GameMap* gameMap;
