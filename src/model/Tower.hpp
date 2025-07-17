@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "TowerType.hpp"
 
-class Enemy; // Forward declaration
+class Enemy; 
 
 enum class TowerLevel {
     LEVEL_1 = 1,
@@ -27,7 +27,6 @@ public:
 
     std::vector<int> collectRewards();
     
-    // Système d'amélioration
     bool canUpgrade() const;
     int getUpgradeCost() const;
     void upgrade();
@@ -46,12 +45,10 @@ private:
     float rotationSpeed;
     float targetRotation;
     
-    // Système de combat
     int damage;
     float fireRate;
     float timeSinceLastShot;
     
-    // Système d'amélioration
     TowerLevel level;
     static const int UPGRADE_COST_LEVEL_2 = 50;
     static const int UPGRADE_COST_LEVEL_3 = 100;
