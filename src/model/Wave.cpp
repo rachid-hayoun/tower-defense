@@ -1,4 +1,4 @@
-#include "WaveManager.hpp"
+#include "Wave.hpp"
 #include "GameMap.hpp"
 #include <iostream>
 
@@ -81,15 +81,11 @@ void WaveManager::update(float deltaTime) {
         timeUntilNextWave -= deltaTime;
     }
     
-    // Mettre à jour tous les ennemis actifs
     for (auto& enemy : activeEnemies) {
         if (enemy && !enemy->isDead() && !enemy->hasReachedEnd()) {
             enemy->update(deltaTime);
         }
     }
-    
-    // Note: On ne supprime plus automatiquement les ennemis morts ici
-    // pour permettre au main.cpp de récupérer les récompenses d'abord
 }
 
 void WaveManager::updateWaveProgress(float deltaTime) {
@@ -117,8 +113,6 @@ void WaveManager::updateWaveProgress(float deltaTime) {
             } else {
                 std::cout << "Toutes les vagues terminées ! Victoire !" << std::endl;
             }
-            
-            // Nettoyer les ennemis morts/arrivés après la fin de vague
             removeDeadEnemies();
         }
     }
@@ -158,7 +152,6 @@ std::unique_ptr<Enemy> WaveManager::createEnemy(EnemyType type) {
     
     switch (type) {
         case EnemyType::BASIC:
-            // Valeurs par défaut : 100 HP, 150 speed, 10 reward
             break;
             
         case EnemyType::FAST:
@@ -206,8 +199,6 @@ void WaveManager::removeDeadEnemies() {
         activeEnemies.end()
     );
 }
-
-// Nouvelle méthode pour forcer le nettoyage depuis main.cpp
 void WaveManager::cleanupProcessedEnemies() {
     removeDeadEnemies();
 }
