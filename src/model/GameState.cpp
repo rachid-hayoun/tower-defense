@@ -2,8 +2,7 @@
 #include <iostream>
 
 GameState::GameState() : money(150), lives(20), uiPosition(10.0f, 10.0f) {
-    // Configuration des textes UI
-    moneyText.setCharacterSize(20);
+    haracterSize(20);
     moneyText.setFillColor(sf::Color::Yellow);
     
     livesText.setCharacterSize(20);
@@ -66,17 +65,14 @@ void GameState::updateUITexts() {
 }
 
 void GameState::drawUI(sf::RenderWindow& window, sf::Font& font) {
-    // Définir la police pour tous les textes
     moneyText.setFont(font);
     livesText.setFont(font);
     towerCostText.setFont(font);
-    
-    // Positionner les éléments UI
+
     moneyText.setPosition(uiPosition.x, uiPosition.y);
     livesText.setPosition(uiPosition.x + 200.0f, uiPosition.y);
     towerCostText.setPosition(uiPosition.x, uiPosition.y + 30.0f);
     
-    // Dessiner les éléments UI
     window.draw(moneyText);
     window.draw(livesText);
     window.draw(towerCostText);
