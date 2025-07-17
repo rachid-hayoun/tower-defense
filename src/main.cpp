@@ -1,9 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include "GameMap.hpp"
-#include "Enemy.hpp"
-#include "WaveManager.hpp"
+#include "Ennemies.hpp"
+#include "Wave.hpp"
 #include "GameState.hpp"
-#include "ModernUI.hpp"
+#include "ViewUI.hpp"
 #include "MainMenu.hpp" 
 #include <iostream>
 
@@ -36,7 +36,7 @@ int main() {
     sf::Clock clock;
     sf::Font font;
     
-    if (!font.loadFromFile("Assets/Fonts/modern_font.ttf")) {
+    if (!font.loadFromFile("modern_font.ttf")) {
         std::cout << "La police marche pas" << std::endl;
     }
 
@@ -88,7 +88,7 @@ int main() {
                                 if (gameMap.hasTowerAt(tileX, tileY)) {
                                     gameMap.selectTower(event.mouseButton.x, event.mouseButton.y);
                                 } else if (gameMap.isPlace(tileX, tileY)) {
-                                    // Déterminer le type de tour et son coût
+                            
                                     TowerType towerType;
                                     int cost;
                                     
@@ -139,7 +139,7 @@ int main() {
                                 }
                             }
                         }
-                        // Sélection des types de tours
+                    
                         else if (event.key.code == sf::Keyboard::Num1) {
                             buildMode = BASIC_TOWER;
                         }
@@ -154,7 +154,6 @@ int main() {
             }
         }
 
-        // Mise à jour des états
         switch (appState) {
             case MENU:
                 mainMenu.update(deltaTime);
@@ -165,20 +164,19 @@ int main() {
                     if (!gameState.isGameOver()) {
                         waveManager->update(deltaTime);
 
-                        // Collecte des récompenses des tours
+                
                         std::vector<int> rewards = gameMap.collectAllTowerRewards();
                         for (int reward : rewards) {
                             gameState.addMoney(reward);
                         }
 
-                        // Vérification des ennemis qui ont atteint la fin
                         for (const auto& enemy : waveManager->getEnemies()) {
                             if (enemy && enemy->hasReachedEnd()) {
                                 gameState.loseLife();
                             }
                         }
 
-                        // Mise à jour des tours avec la liste des ennemis
+                    
                         std::vector<Enemy*> enemyPtrs;
                         for (const auto& enemy : waveManager->getEnemies()) {
                             if (enemy && !enemy->isDead() && !enemy->hasReachedEnd()) {
@@ -198,7 +196,6 @@ int main() {
                 break;
         }
 
-        // Rendu
         window.clear();
         
         switch (appState) {
@@ -208,40 +205,33 @@ int main() {
                 
             case GAME:
                 if (waveManager) {
-                    // Arrière-plan avec effet moderne
+                    
                     modernUI.drawBackground(window);
                     
-                    // Carte et éléments de jeu
                     gameMap.draw(window);
                     gameMap.drawTowerRanges(window);
 
-                    // Ennemis
                     for (const auto& enemy : waveManager->getEnemies()) {
                         if (enemy && !enemy->isDead()) {
                             enemy->draw(window);
                         }
                     }
 
-                    // Interface utilisateur moderne
                     modernUI.drawHUD(window, font, 
                                     gameState.getMoney(), 
                                     gameState.getLives(), 
                                     waveManager->getCurrentWaveNumber(), 
                                     waveManager->getTotalWaves());
 
-                    // Indicateur de vague
                     modernUI.drawWaveIndicator(window, font, 
                                               waveManager->isWaveActive(), 
                                               (int)waveManager->getTimeUntilNextWave());
 
-                    // Mode de construction des tours
                     modernUI.drawBuildMode(window, font, 
                                           (int)buildMode,
                                           TowerConfig::getStatsForType(TowerType::BASIC).baseCost,
                                           TowerConfig::getStatsForType(TowerType::SNIPER).baseCost,
                                           TowerConfig::getStatsForType(TowerType::CANNON).baseCost);
-
-                    // Informations de la tour sélectionnée
                     Tower* selectedTower = gameMap.getSelectedTower();
                     if (selectedTower != nullptr) {
                         std::string towerInfo = selectedTower->getTypeString() + "\n";
@@ -253,10 +243,6 @@ int main() {
                                               selectedTower->getUpgradeCost());
                     }
 
-                    // Contrôles
-                    modernUI.drawControls(window, font);
-
-                    // Écran de fin de jeu
                     if (gameState.isGameOver()) {
                         modernUI.drawGameOver(window, font);
                     }
@@ -266,8 +252,6 @@ int main() {
 
         window.display();
     }
-
-    // Nettoyage
     if (waveManager) {
         delete waveManager;
     }
