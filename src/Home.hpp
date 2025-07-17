@@ -61,13 +61,13 @@ public:
             p.type = rand() % 3;
             
             switch(p.type) {
-                case 0: // Feuilles
+                case 0: 
                     p.color = sf::Color(46 + rand() % 50, 174 + rand() % 30, 96, 120 + rand() % 80);
                     break;
-                case 1: // Pollen
+                case 1:
                     p.color = sf::Color(241, 196 + rand() % 30, 15, 100 + rand() % 100);
                     break;
-                case 2: // Pétales
+                case 2:
                     p.color = sf::Color(255, 182 + rand() % 50, 193, 80 + rand() % 120);
                     break;
             }
@@ -104,19 +104,19 @@ public:
                 
                 int edge = rand() % 4;
                 switch(edge) {
-                    case 0: // Haut
+                    case 0: 
                         particle.position = sf::Vector2f(rand() % 1680, -30);
                         particle.velocity.y = abs(particle.velocity.y);
                         break;
-                    case 1: // Droite
+                    case 1: 
                         particle.position = sf::Vector2f(1710, rand() % 960);
                         particle.velocity.x = -abs(particle.velocity.x);
                         break;
-                    case 2: // Bas
+                    case 2: 
                         particle.position = sf::Vector2f(rand() % 1680, 990);
                         particle.velocity.y = -abs(particle.velocity.y);
                         break;
-                    case 3: // Gauche
+                    case 3: 
                         particle.position = sf::Vector2f(-30, rand() % 960);
                         particle.velocity.x = abs(particle.velocity.x);
                         break;
@@ -282,14 +282,12 @@ public:
     }
     
     void drawInstructions(sf::RenderWindow& window, sf::Font& font) {
-        // Titre
-        sf::Text title("Comment Jouer", font, 60);
+        sf::Text title("Comment Jouer ?", font, 60);
         title.setPosition(840 - title.getGlobalBounds().width / 2, 50);
         title.setFillColor(sf::Color(46, 204, 113));
         title.setStyle(sf::Text::Bold);
         window.draw(title);
-        
-        // Panel d'instructions
+    
         sf::RectangleShape panel(sf::Vector2f(1200, 700));
         panel.setPosition(240, 150);
         panel.setFillColor(sf::Color(20, 50, 30, 200));
@@ -297,9 +295,8 @@ public:
         panel.setOutlineColor(sf::Color(46, 204, 113, 150));
         window.draw(panel);
         
-        // Texte d'instructions
         std::vector<std::string> instructions = {
-            "OBJECTIVE:",
+            "OBJECTIF:",
             "   Defend ton chateau de l'invasion !",
             "",
             "CONTROLES:",
@@ -336,8 +333,6 @@ public:
             window.draw(text);
             yPos += 35;
         }
-        
-        // Instruction de retour
         sf::Text backText("ESC ou ENTRER pour retourner au menu", font, 24);
         backText.setPosition(840 - backText.getGlobalBounds().width / 2, 880);
         backText.setFillColor(sf::Color(130, 224, 170));
@@ -345,14 +340,12 @@ public:
     }
     
     void drawCredits(sf::RenderWindow& window, sf::Font& font) {
-        // Titre
         sf::Text title("CREDITS", font, 60);
         title.setPosition(840 - title.getGlobalBounds().width / 2, 50);
         title.setFillColor(sf::Color(46, 204, 113));
         title.setStyle(sf::Text::Bold);
         window.draw(title);
         
-        // Panel de crédits
         sf::RectangleShape panel(sf::Vector2f(800, 600));
         panel.setPosition(440, 200);
         panel.setFillColor(sf::Color(20, 50, 30, 200));
@@ -364,17 +357,13 @@ public:
             "TOWER DEFENSE",
             "",
             "Devellopeurs:",
-            "   Abdel, Rachid, Zaky et Djacem",
-            "",
-            "Interface:",
-            "   Abdel et Rachid",
+            "   Sana BOUCHAL",
             "",
             "Cree avec:",
             "   SFML",
             "   C++",
             "",
             "Version 1.0",
-            "   Cree avec Amour"
         };
         
         float yPos = 240;
