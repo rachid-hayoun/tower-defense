@@ -21,7 +21,6 @@ GameMap::GameMap() : hoveredTileX(-1), hoveredTileY(-1), isValidHover(false), se
         {0,10,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4}
     };
 
-    // Initialiser la grille de placement des tours
     towerPlacement.resize(MAP_HEIGHT, std::vector<bool>(MAP_WIDTH, false));
 
     hoverIndicator.setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
@@ -102,21 +101,19 @@ bool GameMap::loadTexturesFromFiles() {
 }
 
 bool GameMap::loadTowerTextures() {
-    // Charger les textures pour chaque type de tour
-    if (!towerTextures[TowerType::BASIC].loadFromFile("Assets/Towers/Tower1.png")) {
+    if (!towerTextures[TowerType::BASIC].loadFromFile("Tower1.png")) {
         std::cout << "Impossible de charger Tower1.png" << std::endl;
         return false;
     }
     
-    if (!towerTextures[TowerType::SNIPER].loadFromFile("Assets/Towers/TowerSniper.png")) {
+    if (!towerTextures[TowerType::SNIPER].loadFromFile("TowerSniper.png")) {
         std::cout << "Impossible de charger TowerSniper.png" << std::endl;
-        // Utiliser la texture de base comme fallback
+        
         towerTextures[TowerType::SNIPER] = towerTextures[TowerType::BASIC];
     }
     
-    if (!towerTextures[TowerType::CANNON].loadFromFile("Assets/Towers/TowerCannon.png")) {
+    if (!towerTextures[TowerType::CANNON].loadFromFile("TowerCannon.png")) {
         std::cout << "Impossible de charger TowerCannon.png" << std::endl;
-        // Utiliser la texture de base comme fallback
         towerTextures[TowerType::CANNON] = towerTextures[TowerType::BASIC];
     }
     
@@ -130,8 +127,6 @@ void GameMap::addTower(int tileX, int tileY, TowerType type) {
     float posY = tileY * TILE_SIZE + TILE_SIZE / 2.f;
     
     Tower newTower(posX, posY, &towerTextures[type], type);
-    
-    // Calculer la rotation de la tour
     float angle = calculateTowerRotation(tileX, tileY);
     newTower.setRotation(angle);
     
@@ -143,16 +138,16 @@ float GameMap::calculateTowerRotation(int tileX, int tileY) {
     float angle = 0.f;
     
     if (tileX > 0 && isPath(tileX - 1, tileY)) {
-        angle = -90.f; // Gauche
+        angle = -90.f; 
     }
     else if (tileX < MAP_WIDTH - 1 && isPath(tileX + 1, tileY)) {
-        angle = 90.f;   // Droite
+        angle = 90.f;   
     }
     else if (tileY > 0 && isPath(tileX, tileY - 1)) {
-        angle = 0.f; // Haut
+        angle = 0.f; 
     }
     else if (tileY < MAP_HEIGHT - 1 && isPath(tileX, tileY + 1)) {
-        angle = 180.f;  // Bas
+        angle = 180.f;  
     }
     else if (tileX > 0 && isPath(tileX + 1, tileY - 1)) {
         angle = 45.f; 
@@ -175,7 +170,6 @@ void GameMap::selectTower(int mouseX, int mouseY) {
     int tileY = mouseY / TILE_SIZE;
     
     if (hasTowerAt(tileX, tileY)) {
-        // Trouver la tour à cette position
         float targetX = tileX * TILE_SIZE + TILE_SIZE / 2.f;
         float targetY = tileY * TILE_SIZE + TILE_SIZE / 2.f;
         
@@ -245,9 +239,9 @@ void GameMap::updateHover(int mouseX, int mouseY) {
         hoverIndicator.setPosition(tileX * TILE_SIZE, tileY * TILE_SIZE);
 
         if (isPath(tileX, tileY)) {
-            hoverIndicator.setOutlineColor(sf::Color::Red);
-        } else if (hasTowerAt(tileX, tileY)) {
             hoverIndicator.setOutlineColor(sf::Color::Blue);
+        } else if (hasTowerAt(tileX, tileY)) {
+            hoverIndicator.setOutlineColor(sf::Color::Red);
         } else {
             hoverIndicator.setOutlineColor(sf::Color::Green);
         }
@@ -264,7 +258,6 @@ void GameMap::updateTowers(float deltaTime, const std::vector<Enemy*>& enemies) 
 }
 
 void GameMap::draw(sf::RenderWindow& window) {
-    // Dessiner les tuiles
     for (int y = 0; y < MAP_HEIGHT; y++) {
         for (int x = 0; x < MAP_WIDTH; x++) {
             sf::Sprite* currentSprite;
@@ -307,20 +300,15 @@ void GameMap::draw(sf::RenderWindow& window) {
             window.draw(*currentSprite);
         }
     }
-
-    // Dessiner les tours
     for (auto& tower : towers) {
         tower.draw(window);
     }
-
-    // Dessiner l'indicateur de survol
     if (isValidHover) {
         window.draw(hoverIndicator);
     }
 }
 
 void GameMap::drawTowerRanges(sf::RenderWindow& window) {
-    // Dessiner la portée de la tour sélectionnée
     if (selectedTower != nullptr) {
         selectedTower->drawRange(window);
     }
@@ -328,11 +316,9 @@ void GameMap::drawTowerRanges(sf::RenderWindow& window) {
 
 void GameMap::drawTowerInfo(sf::RenderWindow& window, sf::Font& font) {
     if (selectedTower != nullptr) {
-        // Position pour l'affichage des informations (coin supérieur droit)
         float infoX = 1300;
         float infoY = 200;
-        
-        // Créer le texte d'information
+    
         sf::Text infoText;
         infoText.setFont(font);
         infoText.setCharacterSize(20);
@@ -352,7 +338,6 @@ void GameMap::drawTowerInfo(sf::RenderWindow& window, sf::Font& font) {
         
         infoText.setString(info);
         
-        // Dessiner un fond semi-transparent
         sf::RectangleShape background;
         sf::FloatRect textBounds = infoText.getGlobalBounds();
         background.setSize(sf::Vector2f(textBounds.width + 20, textBounds.height + 20));
